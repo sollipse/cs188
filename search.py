@@ -11,7 +11,6 @@
 # (denero@cs.berkeley.edu) and Dan Klein (klein@cs.berkeley.edu).
 # Student side autograding was added by Brad Miller, Nick Hay, and 
 # Pieter Abbeel (pabbeel@cs.berkeley.edu).
-#Created by: Paul Kang
 
 
 """
@@ -91,53 +90,50 @@ def depthFirstSearch(problem):
     """
     "*** YOUR CODE HERE ***"
     solpath = []
-    beenhere = []
+    visited = []
     fringe = []
-    fringe.append(problem.getStartState())
+    fringe.append((problem.getStartState(), solpath))
     while fringe:
-        print "this is the fringe"
         item = fringe.pop()
-        print fringe
-        print "this is where I am"
-        print item
-        print "this is where I can go"
-        print problem.getSuccessors(item)
-        c = []
-        c = [(i[0], i[1]) for i in problem.getSuccessors(item)]
-        for i in c:
-            if i[0] in beenhere:
-                c.remove(i)
-        print "this is the value c is returning"
-        print c
-        if c:
-            solpath.append(c.pop())
-            print "this is the path I'm describing so far"
-            print solpath
-        if problem.isGoalState(item):
-            print "goal found"
-            print solpath
+        if item[0] not in visited:
+            visited.append(item[0])
+            solpath = item[1]
+        else:
+            solpath = fringe[-1][1]
+        if problem.isGoalState(item[0]):
             c = [i[1] for i in solpath]
             return c
-        if not problem.getSuccessors(item):
-            solpath.pop()
-        if item not in beenhere:
-            print "this is where I've been"
-            beenhere.append(item)
-            print beenhere
-            print "this is the order of succession"
-            print problem.getSuccessors(item)
-            for i in problem.getSuccessors(item):
-                if i[0] not in beenhere:
-                    fringe.append(i[0])
-            print "this is how it was appended"
-            print fringe
-    
+        for i in problem.getSuccessors(item[0]):
+            if i[0] not in visited:
+                d = []
+                d = item[1][:]
+                d.append((i[0], i[1]))
+                fringe.append((i[0], d))
+        
+        
 def breadthFirstSearch(problem):
-    """
-    Search the shallowest nodes in the search tree first.
-    """
-    "*** YOUR CODE HERE ***"
-    util.raiseNotDefined()
+    solpath = []
+    visited = []
+    fringe = []
+    fringe.append((problem.getStartState(), solpath))
+    while fringe:
+        item = fringe.pop()
+        if item[0] not in visited:
+            visited.append(item[0])
+            solpath = item[1]
+        else:
+            solpath = fringe[0][1]
+        if problem.isGoalState(item[0]):
+            c = [i[1] for i in solpath]
+            return c
+        for i in problem.getSuccessors(item[0]):
+            if i[0] not in visited:
+                z = [x[0] for x in fringe]
+                if i[0] in z:
+                    continue
+                d = item[1][:]
+                d.append((i[0], i[1]))
+                fringe.insert(0, (i[0], d))
 
 def uniformCostSearch(problem):
     "Search the node of least total cost first. "
