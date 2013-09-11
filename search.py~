@@ -137,7 +137,8 @@ def uniformCostSearch(problem):
     visited = set()
     track = util.Queue()
     fringe = util.PriorityQueue()
-    fringe.push((problem.getStartState(), solpath), 9999)
+    fringe.push((problem.getStartState(), solpath, 9999))
+    track.push((problem.getStartState(), solpath))
     while fringe:
         item = fringe.pop()
         track.pop()
@@ -154,7 +155,7 @@ def uniformCostSearch(problem):
                     continue
                 d = item[1][:]
                 d.append((i[0], i[1]))
-                fringe.push((i[0], d), i[2])
+                fringe.push((i[0], d, item[2] + i[2]), item[2] + i[2])
                 track.push((i[0], d))
 
 def nullHeuristic(state, problem=None):
