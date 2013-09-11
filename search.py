@@ -102,7 +102,6 @@ def depthFirstSearch(problem):
             return c
         for i in problem.getSuccessors(item[0]):
             if i[0] not in visited:
-                d = []
                 d = item[1][:]
                 d.append((i[0], i[1]))
                 fringe.push((i[0], d))
@@ -113,32 +112,7 @@ def breadthFirstSearch(problem):
     """
     solpath = []
     visited = set()
-    fringe = []
-    fringe.append((problem.getStartState(), solpath))
-    while fringe:
-        item = fringe.pop()
-        if item[0] not in visited:
-            visited.add(item[0])
-            solpath = item[1]
-        else:
-            solpath = fringe[0][1]
-        if problem.isGoalState(item[0]):
-            c = [i[1] for i in solpath]
-            return c
-        for i in problem.getSuccessors(item[0]):
-            if i[0] not in visited:
-                z = [x[0] for x in fringe]
-                if i[0] in z:
-                    continue
-                d = item[1][:]
-                d.append((i[0], i[1]))
-                fringe.insert(0, (i[0], d))
-
-def uniformCostSearch(problem):
-    "Search the node of least total cost first. "
-    solpath = []
-    visited = set()
-    fringe = util.Stack()
+    fringe = util.Queue()
     fringe.push((problem.getStartState(), solpath))
     while fringe:
         item = fringe.pop()
@@ -150,10 +124,39 @@ def uniformCostSearch(problem):
             return c
         for i in problem.getSuccessors(item[0]):
             if i[0] not in visited:
-                d = []
+                z = [x[0] for x in fringe.list]
+                if i[0] in z:
+                    continue
                 d = item[1][:]
                 d.append((i[0], i[1]))
                 fringe.push((i[0], d))
+
+def uniformCostSearch(problem):
+    "Search the node of least total cost first. "
+    solpath = []
+    visited = set()
+    track = util.Queue()
+    fringe = util.PriorityQueue()
+    fringe.push((problem.getStartState(), solpath), 9999)
+    track.push((problem.getStartState(), solpath))
+    while fringe:
+        item = fringe.pop()
+        track.pop()
+        if item[0] not in visited:
+            visited.add(item[0])
+            solpath = item[1]
+        if problem.isGoalState(item[0]):
+            c = [i[1] for i in solpath]
+            return c
+        for i in problem.getSuccessors(item[0]):
+            if i[0] not in visited:
+                z = [x[0] for x in track.list]
+                if i[0] in z:
+                    continue
+                d = item[1][:]
+                d.append((i[0], i[1]))
+                fringe.push((i[0], d), i[2])
+                track.push((i[0], d))
 
 def nullHeuristic(state, problem=None):
     """
