@@ -141,6 +141,7 @@ def uniformCostSearch(problem):
     track.push((problem.getStartState(), solpath))
     while fringe:
         item = fringe.pop()
+        track.pop()
         if item[0] not in visited:
             visited.add(item[0])
             solpath = item[1]
@@ -149,8 +150,8 @@ def uniformCostSearch(problem):
             return c
         for i in problem.getSuccessors(item[0]):
             if i[0] not in visited:
-                z = [x[0] for x in fringe.list]
-                if i[0] in z and len():
+                z = [x[0] for x in track.list]
+                if i[0] in z:
                     continue
                 d = item[1][:]
                 d.append((i[0], i[1]))
