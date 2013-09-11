@@ -88,18 +88,15 @@ def depthFirstSearch(problem):
     print "Is the start a goal?", problem.isGoalState(problem.getStartState())
     print "Start's successors:", problem.getSuccessors(problem.getStartState())
     """
-    "*** YOUR CODE HERE ***"
     solpath = []
-    visited = []
-    fringe = []
-    fringe.append((problem.getStartState(), solpath))
+    visited = set()
+    fringe = util.Stack()
+    fringe.push((problem.getStartState(), solpath))
     while fringe:
         item = fringe.pop()
         if item[0] not in visited:
-            visited.append(item[0])
+            visited.add(item[0])
             solpath = item[1]
-        else:
-            solpath = fringe[-1][1]
         if problem.isGoalState(item[0]):
             c = [i[1] for i in solpath]
             return c
@@ -108,18 +105,20 @@ def depthFirstSearch(problem):
                 d = []
                 d = item[1][:]
                 d.append((i[0], i[1]))
-                fringe.append((i[0], d))
-        
-        
+                fringe.push((i[0], d))
+
 def breadthFirstSearch(problem):
+    """
+    Search the shallowest nodes in the search tree first.
+    """
     solpath = []
-    visited = []
+    visited = set()
     fringe = []
     fringe.append((problem.getStartState(), solpath))
     while fringe:
         item = fringe.pop()
         if item[0] not in visited:
-            visited.append(item[0])
+            visited.add(item[0])
             solpath = item[1]
         else:
             solpath = fringe[0][1]
@@ -137,8 +136,24 @@ def breadthFirstSearch(problem):
 
 def uniformCostSearch(problem):
     "Search the node of least total cost first. "
-    "*** YOUR CODE HERE ***"
-    util.raiseNotDefined()
+    solpath = []
+    visited = set()
+    fringe = util.Stack()
+    fringe.push((problem.getStartState(), solpath))
+    while fringe:
+        item = fringe.pop()
+        if item[0] not in visited:
+            visited.add(item[0])
+            solpath = item[1]
+        if problem.isGoalState(item[0]):
+            c = [i[1] for i in solpath]
+            return c
+        for i in problem.getSuccessors(item[0]):
+            if i[0] not in visited:
+                d = []
+                d = item[1][:]
+                d.append((i[0], i[1]))
+                fringe.push((i[0], d))
 
 def nullHeuristic(state, problem=None):
     """
