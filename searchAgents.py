@@ -287,7 +287,6 @@ class CornersProblem(search.SearchProblem):
         self.cornerBool = []
         for corner in self.corners:
             self.cornerBool.append(startingGameState.hasFood(*corner))
-        self.pacCoord = self.startingPosition
 
     def getStartState(self):
         "Returns the start state (in your state space, not the full Pacman state space)"
@@ -295,10 +294,14 @@ class CornersProblem(search.SearchProblem):
 
     def isGoalState(self, state):
         "Returns whether this search state is a goal state of the problem"
+        for i in range(len(self.corners)):
+            if state == self.corners[i]:
+                self.cornerBool[i] = False
+        print self.cornerBool
         for corner in self.cornerBool:
-            if not corner:
-                return True
-        return False
+            if corner:
+                return False
+        return True
 
     def getSuccessors(self, state):
         """
@@ -324,8 +327,9 @@ class CornersProblem(search.SearchProblem):
             dx, dy = Actions.directionToVector(action)
             nextx, nexty = int(x + dx), int(y + dy)
             hitsWall = self.walls[nextx][nexty]
-            if not hitsWall:
-                successors.append(((dx, dy), action, 1))
+            if hitsWall:
+                continue
+            successors.append(((nextx, nexty), action, 1))
 
         self._expanded += 1
         return successors
