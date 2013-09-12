@@ -284,7 +284,6 @@ class CornersProblem(search.SearchProblem):
         self._expanded = 0 # Number of search nodes expanded
         # Please add any code here which you would like to use
         # in initializing the problem
-        self.cornerBool = []
 
     def getStartState(self):
         "Returns the start state (in your state space, not the full Pacman state space)"
