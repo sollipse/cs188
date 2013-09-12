@@ -285,20 +285,15 @@ class CornersProblem(search.SearchProblem):
         # Please add any code here which you would like to use
         # in initializing the problem
         self.cornerBool = []
-        for corner in self.corners:
-            self.cornerBool.append(startingGameState.hasFood(*corner))
 
     def getStartState(self):
         "Returns the start state (in your state space, not the full Pacman state space)"
-        return self.startingPosition
+        return (self.startingPosition[0], self.startingPosition[1], (True, True, True, True))
 
     def isGoalState(self, state):
         "Returns whether this search state is a goal state of the problem"
-        for i in range(len(self.corners)):
-            if state == self.corners[i]:
-                self.cornerBool[i] = False
-        for corner in self.cornerBool:
-            if corner:
+        for i in state[2]:
+            if i == True:
                 return False
         return True
 
@@ -322,13 +317,17 @@ class CornersProblem(search.SearchProblem):
             #   dx, dy = Actions.directionToVector(action)
             #   nextx, nexty = int(x + dx), int(y + dy)
             #   hitsWall = self.walls[nextx][nexty]
-            x,y = state
+            x,y,z = state
             dx, dy = Actions.directionToVector(action)
             nextx, nexty = int(x + dx), int(y + dy)
             hitsWall = self.walls[nextx][nexty]
             if hitsWall:
                 continue
-            successors.append(((nextx, nexty), action, 1))
+            nextTup = list(state[2])
+            for i in range(len(self.corners)):
+                if (nextx, nexty) == self.corners[i]:
+                    nextTup[i] = False
+            successors.append(((nextx, nexty, tuple(nextTup)), action, 1))
 
         self._expanded += 1
         return successors
