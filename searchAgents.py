@@ -297,7 +297,6 @@ class CornersProblem(search.SearchProblem):
         for i in range(len(self.corners)):
             if state == self.corners[i]:
                 self.cornerBool[i] = False
-        print self.cornerBool
         for corner in self.cornerBool:
             if corner:
                 return False
