@@ -1,0 +1,8 @@
+This is code compiled for a series of exercises in the UC Berkeley course CS188 --MACHINE LEARNING.
+
+The Python package files for the game itself are proprietary to the UC Berkeley Course Staff for CS188. 
+
+Student modifications to this package can be found in ghostAgents.py, game.py, pacmanAgents.py and searchAgents.py.
+
+The purpose of this repo is to indicate a grasp of basic search structures, from practically implementing BFS and DFS with counter().util, to adjusting features and implementing rudimentary Q-Learning concepts in pacManAgents.py.
+
